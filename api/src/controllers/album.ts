@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
-import Album from '../models/Album'
+import Album, { AlbumDocument } from '../models/Album'
 import AlbumService from '../services/album'
 import { BadRequestError } from '../helpers/apiError'
 
@@ -41,28 +41,34 @@ export const createAlbum = async (
   res: Response,
   next: NextFunction
 ) => {
-  // Explicitly destructuring the required properties and spreading the rest should the JSON request body have any
   try {
     const {
       name,
       ISWC,
       artist,
+      collaborators,
       genres,
       publishedYear,
-      ...remainingAlbumProperties
+      isAvailable,
+      lastBorrowedDate,
+      returnDate,
+      _borrowerId,
     } = req.body
-
-    const album = new Album({
+    const album = {
       name,
       ISWC,
       artist,
+      collaborators,
       genres,
       publishedYear,
-      ...remainingAlbumProperties,
-    })
+      isAvailable,
+      lastBorrowedDate,
+      returnDate,
+      _borrowerId,
+    } as AlbumDocument
 
-    await AlbumService.create(album)
-    res.json(album)
+    const createdAlbum = await AlbumService.create(album)
+    res.json(createdAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))
@@ -99,6 +105,46 @@ export const deleteAlbum = async (
   try {
     await AlbumService.deleteAlbum(req.params.albumId)
     res.status(204).end()
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+// change these functions to pull the userId directly from the request object after a middleware
+// responsible for authentication will append it to the function
+export const borrowAlbum = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId, days } = req.body
+    const albumId = req.params.albumId
+    const borrowedAlbum = await AlbumService.borrowAlbum(userId, albumId, days)
+    res.json(borrowedAlbum)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+export const returnAlbum = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.body
+    const albumId = req.params.albumId
+    const returnedAlbum = await AlbumService.returnAlbum(userId, albumId)
+    res.json(returnedAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))

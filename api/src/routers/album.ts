@@ -6,6 +6,8 @@ import {
   findById,
   updateAlbum,
   deleteAlbum,
+  borrowAlbum,
+  returnAlbum,
 } from '../controllers/album'
 
 const router = express.Router()
@@ -19,5 +21,8 @@ router.post('/', createAlbum)
 router.put('/:albumId', updateAlbum)
 
 router.delete('/:albumId', deleteAlbum)
+
+router.put('/:albumId/borrow', borrowAlbum)
+router.put('/:albumId/return', returnAlbum)
 
 export default router
