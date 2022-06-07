@@ -1,11 +1,15 @@
 import mongoose, { Document } from 'mongoose'
 
-export type UserDocument = Document & {
+export type User = {
   firstName: string
   lastName: string
   email: string
+  role: string
 }
 
+export type UserDocument = Document & User
+
+// lastName false because google ID token may not contain a lastname
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -15,12 +19,18 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
     index: true,
-    required: true,
+    required: false,
+    default: null,
   },
   email: {
     type: String,
     index: true,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: ['ADMIN', 'USER'],
+    default: 'USER',
   },
 })
 

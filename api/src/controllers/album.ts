@@ -18,6 +18,7 @@ export const findAll = async (
       next(error)
     }
   }
+  console.log(`Album Request from ${req.user}`)
 }
 
 export const findById = async (

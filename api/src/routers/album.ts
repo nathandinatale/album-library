@@ -1,4 +1,5 @@
 import express from 'express'
+import verifyAuth from '../middlewares/verifyAuth'
 
 import {
   createAlbum,
@@ -12,10 +13,10 @@ import {
 
 const router = express.Router()
 
-// Every path we define here will get /api/v1/movies prefix
+router.use(verifyAuth)
 
 router.get('/', findAll)
-router.get('/:albumId', findById)
+router.get('/:albumId', verifyAuth, findById)
 
 router.post('/', createAlbum)
 router.put('/:albumId', updateAlbum)
