@@ -1,7 +1,7 @@
 import mongoose, { Document, isValidObjectId } from 'mongoose'
 
 // Should returndate
-export type AlbumDocument = Document & {
+export type Album = {
   name: string
   ISWC: number
   artist: string
@@ -13,6 +13,8 @@ export type AlbumDocument = Document & {
   returnDate: Date | null
   _borrowerId: mongoose.Types.ObjectId | null
 }
+
+export type AlbumDocument = Document & Album
 
 // Additional validation could be added in the model here, certain number of genres
 const albumSchema = new mongoose.Schema({

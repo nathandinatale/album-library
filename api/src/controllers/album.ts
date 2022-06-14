@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
-import Album, { AlbumDocument } from '../models/Album'
+import AlbumModel from '../models/Album'
 import AlbumService from '../services/album'
 import { BadRequestError } from '../helpers/apiError'
+import UserService from '../services/user'
+import { UserDocument } from '../models/User'
 
 export const findAll = async (
   req: Request,
@@ -50,12 +52,12 @@ export const createAlbum = async (
       collaborators,
       genres,
       publishedYear,
-      isAvailable,
-      lastBorrowedDate,
-      returnDate,
-      _borrowerId,
+      isAvailable = true,
+      lastBorrowedDate = null,
+      returnDate = null,
+      _borrowerId = null,
     } = req.body
-    const album = {
+    const album = new AlbumModel({
       name,
       ISWC,
       artist,
@@ -66,9 +68,10 @@ export const createAlbum = async (
       lastBorrowedDate,
       returnDate,
       _borrowerId,
-    } as AlbumDocument
-
+    })
+    console.log(album)
     const createdAlbum = await AlbumService.create(album)
+    console.log(createdAlbum)
     res.json(createdAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
@@ -123,9 +126,16 @@ export const borrowAlbum = async (
   next: NextFunction
 ) => {
   try {
-    const { userId, days } = req.body
+    const { days } = req.body
+    const { email, role }: any = req.user
+    const user = (await UserService.findByEmail(email)) as UserDocument
+    console.log(user)
     const albumId = req.params.albumId
-    const borrowedAlbum = await AlbumService.borrowAlbum(userId, albumId, days)
+    const borrowedAlbum = await AlbumService.borrowAlbum(
+      user._id.toString(),
+      albumId,
+      days
+    )
     res.json(borrowedAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
@@ -142,9 +152,13 @@ export const returnAlbum = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body
+    const { email, role }: any = req.user
+    const user = (await UserService.findByEmail(email)) as UserDocument
     const albumId = req.params.albumId
-    const returnedAlbum = await AlbumService.returnAlbum(userId, albumId)
+    const returnedAlbum = await AlbumService.returnAlbum(
+      user._id.toString(),
+      albumId
+    )
     res.json(returnedAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {

@@ -1,6 +1,11 @@
 import Album, { AlbumDocument } from '../models/Album'
-import { NotFoundError } from '../helpers/apiError'
-import mongoose from 'mongoose'
+import {
+  NotFoundError,
+  BadRequestError,
+  InternalServerError,
+} from '../helpers/apiError'
+import mongoose, { isValidObjectId } from 'mongoose'
+import e from 'express'
 
 const findAll = async (): Promise<AlbumDocument[]> => {
   return Album.find()
@@ -51,6 +56,10 @@ const borrowAlbum = async (
     throw new NotFoundError(`Album ${albumId} not found`)
   }
 
+  if (!albumToBorrow.isAvailable) {
+    throw new BadRequestError(`Album ${albumId} is not available for renting!`)
+  }
+
   const update: Partial<AlbumDocument> = {
     isAvailable: false,
     _borrowerId: mongoose.Types.ObjectId(userId),
@@ -62,7 +71,7 @@ const borrowAlbum = async (
     new: true,
   })
   if (!borrowedAlbum) {
-    throw new Error(`Album ${albumId} was not updated`)
+    throw new InternalServerError(`Album ${albumId} was not updated`)
   }
 
   return borrowedAlbum
@@ -72,9 +81,25 @@ const returnAlbum = async (
   userId: string,
   albumId: string
 ): Promise<AlbumDocument | null> => {
-  const albumToReturn = await Album.findById(albumId)
+  const albumToReturn = (await Album.findById(albumId)) as AlbumDocument
+  console.log(albumToReturn)
   if (!albumToReturn) {
     throw new NotFoundError(`Album ${albumId} not found`)
+  }
+  if (albumToReturn.isAvailable) {
+    throw new Error('Can\'t return an album that is available!')
+  }
+
+  if (albumToReturn._borrowerId) {
+    const borrowerId = albumToReturn._borrowerId.toString()
+    console.log(borrowerId)
+    console.log(userId)
+    console.log(borrowerId === userId)
+    if (borrowerId.valueOf() !== userId.valueOf()) {
+      throw new BadRequestError(
+        `The user with ID ${userId} did not rent this album!!`
+      )
+    }
   }
 
   const update: Partial<AlbumDocument> = {
@@ -88,7 +113,7 @@ const returnAlbum = async (
     new: true,
   })
   if (!returnedAlbum) {
-    throw new Error(`Album ${albumId} was not returned`)
+    throw new BadRequestError(`Album ${albumId} was not returned`)
   }
 
   return returnedAlbum
