@@ -15,5 +15,5 @@ export const generateJwt = (
     expiresIn: '1h',
   })
 
-  res.json({ token })
+  res.json({ token, user })
 }

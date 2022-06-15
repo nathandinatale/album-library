@@ -5,12 +5,13 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux'
 import store from '../Store';
-import album, { albumActions } from '../Store/albumSlice';
+import {userActions} from '../Store/userSlice';
 import { fetchAlbums } from '../Actions/album';
 import {useNavigate} from 'react-router-dom'
 
 
 const Login = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
     const [token, setToken] = useState(null)
 
@@ -21,8 +22,9 @@ const Login = () => {
       Authorization: `Bearer ${tokenId}`
     },})
     const backendToken = backendResponse.data.token
-    console.log(backendToken)
+    const user = backendResponse.data.user
     setToken(backendToken)
+    dispatch(userActions.signIn(user))
     localStorage.setItem('token',backendToken)
     navigate('/albums')
   }
