@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {TextField, Button, Box} from '@mui/material'
+import classes from './Dashboard.module.css'
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const Dashboard = () => {
     const [name, setName] = useState('')
@@ -19,19 +22,15 @@ const Dashboard = () => {
 
 
     return (
-        <>
-        <Box component='form' onSubmit={handleSubmit}>
+        <Box component='form' className={classes.formContainer} onSubmit={handleSubmit}>
             <TextField id='name' label='Album Name' required onChange={e => setName(e.target.value)} value={name} error={!name}/>
             <TextField id='artist' label='Primary Artist' required onChange={e => setArtist(e.target.value)} value={artist} error={!artist}/>
             <TextField id ='year' label ='Year Published' type='number' required onChange={e => setYear(e.target.value)} value={year} error={!year}/>
             <TextField id='iswc'  label='ISWC' required type='number' onChange={e => setIswc(e.target.value)} value={iswc} error={!iswc || iswc.length !== 8}
             helperText={iswc.length !== 8 && 'ISWC must be 8 characters'}/>
             <Button onClick={handleSubmit}>Submit</Button>
-            {response && <p>Album was submitted successfully!</p>}
+            {response && <Alert severity='success'>Album was submitted successfully!</Alert>}
         </Box>
-        {name}
-        {iswc}
-        </>
     )
 }
 

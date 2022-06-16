@@ -1,0 +1,19 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 25%;
+    margin: auto;
+    margin-top: 500px;
+}
+
+.formContainer * {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.formContainer Button{
+    align-self: center;
+    max-width: 550px;
+}

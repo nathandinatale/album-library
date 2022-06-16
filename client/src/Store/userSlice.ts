@@ -1,15 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signIn } from "../Actions/user";
+import {
+  signIn,
+  checkLogin,
+  selectUser,
+  fetchUser,
+  updateUser,
+} from "../Actions/user";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     userName: "",
     userEmail: "",
+    _id: "",
     role: null,
+    loggedIn: false,
   },
   reducers: {
     signIn,
+    checkLogin,
+    selectUser,
+    fetchUser,
+    updateUser,
   },
 });
 

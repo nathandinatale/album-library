@@ -16,7 +16,7 @@ const router = express.Router()
 router.use(verifyAuth)
 
 router.get('/', findAll)
-router.get('/:albumId', verifyAuth, findById)
+router.get('/:albumId', findById)
 
 router.post('/', createAlbum)
 router.put('/:albumId', updateAlbum)

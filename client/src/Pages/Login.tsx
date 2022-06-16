@@ -8,6 +8,7 @@ import store from '../Store';
 import {userActions} from '../Store/userSlice';
 import { fetchAlbums } from '../Actions/album';
 import {useNavigate} from 'react-router-dom'
+import classes from './Login.module.css'
 
 
 const Login = () => {
@@ -23,17 +24,21 @@ const Login = () => {
     },})
     const backendToken = backendResponse.data.token
     const user = backendResponse.data.user
+    console.log(user)
+    const role = user.role
     setToken(backendToken)
+    console.log(backendToken)
     dispatch(userActions.signIn(user))
     localStorage.setItem('token',backendToken)
+    localStorage.setItem('role', role)
     navigate('/albums')
   }
 
   const clientId = '1062296584596-ghe50cc3iifj9j52prqqar8844ggldii.apps.googleusercontent.com'
   return (
-    <div className="App">
+    <div className={classes.login}>
       <Provider store={store}>
-      <GoogleOAuthProvider clientId={clientId}>
+      <GoogleOAuthProvider  clientId={clientId}>
         <GoogleLogin onSuccess={handleSuccess}/>
       </GoogleOAuthProvider>
       </Provider>

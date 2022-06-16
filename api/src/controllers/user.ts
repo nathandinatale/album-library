@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 
 import UserModel from '../models/User'
 import UserService from '../services/user'
+import ApiError from '../helpers/apiError'
 import { BadRequestError } from '../helpers/apiError'
 
 export const createUser = async (
@@ -63,6 +65,7 @@ export const updateUser = async (
   try {
     const update = req.body
     const userId = req.params.userId
+    console.log('updating here', update, userId)
     const updatedUser = await UserService.update(userId, update)
     res.json(updatedUser)
   } catch (error) {
@@ -88,5 +91,24 @@ export const deleteUser = async (
     } else {
       next(error)
     }
+  }
+}
+
+export const checkToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const auth = req.headers.authorization || ''
+    const token = auth.split(' ')[1]
+
+    const JWT_SECRET = process.env.JWT_SECRET as string
+    const verifiedUser = jwt.verify(token, JWT_SECRET) as any
+    const { email } = verifiedUser
+    const user = await UserService.findByEmail(email)
+    res.json(user)
+  } catch (error) {
+    res.json(false)
   }
 }
