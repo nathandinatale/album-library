@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { albumActions } from "../Store/albumSlice";
 import { AlbumPreview } from "../Components/AlbumPreview";
-import useCheckLogIn from '../Hooks/useCheckLogIn'
 import { userActions } from "../Store/userSlice";
 import Search from "../Components/Search";
+import { useNavigate } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -20,7 +20,8 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Paper,
+    Paper, Stack, Pagination,
+    Button
   } from '@mui/material'
 
 
@@ -29,6 +30,7 @@ export const SearchContext = createContext<string>('')
 const Albums = () => {
     const [query, setQuery] = useState('')
     const [genres, setGenres] = useState('')
+    const navigate = useNavigate()
 
     
     const dispatch = useDispatch()
@@ -52,18 +54,25 @@ const Albums = () => {
         return array.map((album: any) => (<AlbumPreview key={album.name} album={album}/>))
     }
 
-    console.log(mapResults(loadedAlbums))
+    const handleLogout = () => {
+        dispatch(userActions.signOut())
+        navigate('/')
+    }
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setGenres(event.target.value as string);
-      };
 
+
+  const token = localStorage.getItem('token')
+  const role = localStorage.getItem('role')
+
+  const tabs = ['My Profile', 'Dashboard', 'Logout']
     
 
     return (
     <SearchContext.Provider value = {query}>
         <Link to={`/users/${userId}`}>My Profile</Link>
+        {role === 'ADMIN' && <Link to={'/dashboard'}>     Dashboard</Link>}
         <Search setQuery={setQuery}/>
+        <Button onClick={handleLogout}>Logout</Button>
     {/* {loadedAlbums.length > 0 && loadedAlbums.map((album: any) => (<AlbumPreview key={album.name} album={album}/>))} */}
     <TableContainer component={Paper}>
         <Table>
@@ -80,6 +89,9 @@ const Albums = () => {
             {searchQuery ? mapResults(checkQueryMatches(loadedAlbums)) : mapResults(loadedAlbums)}
             </TableBody>
     </Table>
+    <Stack spacing={2}>
+      <Pagination count={5}/>
+    </Stack>
     </TableContainer>
 
     </SearchContext.Provider>

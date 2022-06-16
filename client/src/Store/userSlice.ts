@@ -5,6 +5,7 @@ import {
   selectUser,
   fetchUser,
   updateUser,
+  signOut,
 } from "../Actions/user";
 
 const userSlice = createSlice({
@@ -22,6 +23,7 @@ const userSlice = createSlice({
     selectUser,
     fetchUser,
     updateUser,
+    signOut,
   },
 });
 

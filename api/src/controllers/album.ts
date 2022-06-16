@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, query } from 'express'
 
 import AlbumModel from '../models/Album'
 import AlbumService from '../services/album'
@@ -21,6 +21,23 @@ export const findAll = async (
     }
   }
   console.log(`Album Request from ${req.user}`)
+}
+
+export const findSpecific = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { offset, count }: any = req.query
+    res.json(await AlbumService.findSpecific(parseInt(offset), parseInt(count)))
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
 }
 
 export const findById = async (

@@ -23,6 +23,7 @@ const RouterRoutes = ({logStatus, role}: any) => (
         <Route path = 'dashboard' element= {<Dashboard/>}/>
         }
         {!logStatus && <Route path = '*' element={<Navigate to ='/' replace/>}/>}
+        {logStatus && <Route path = '*' element={<Navigate to ='/albums' replace/>}/>}
     </Routes>
 )
 

@@ -11,6 +11,13 @@ const findAll = async (): Promise<AlbumDocument[]> => {
   return Album.find()
 }
 
+const findSpecific = async (
+  offset: number,
+  count: number
+): Promise<AlbumDocument[]> => {
+  return Album.find().skip(offset).limit(count)
+}
+
 const findById = async (albumId: string): Promise<AlbumDocument> => {
   const foundAlbum = await Album.findById(albumId)
   if (!foundAlbum) {
@@ -127,4 +134,5 @@ export default {
   deleteAlbum,
   borrowAlbum,
   returnAlbum,
+  findSpecific,
 }

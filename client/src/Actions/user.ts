@@ -5,6 +5,7 @@ import axios from "axios";
 import store from "../Store";
 import { userActions } from "../Store/userSlice";
 import { stat } from "fs";
+import { isNullishCoalesce } from "typescript";
 
 type role = "ADMIN" | "USER";
 
@@ -21,6 +22,16 @@ const signIn = (state: any, action: any) => {
     localStorage.removeItem("role");
     state.loggedIn = false;
   }
+};
+
+const signOut = (state: any) => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  state.userName = "";
+  state.userEmail = "";
+  state._id = "";
+  state.role = null;
+  state.loggedIn = false;
 };
 
 const checkLogin = (state: any) => {
@@ -74,4 +85,4 @@ const selectUser = (state: any, action: any) => {
   state.selectedAlbum = action.payload;
 };
 
-export { signIn, checkLogin, fetchUser, selectUser, updateUser };
+export { signIn, checkLogin, fetchUser, selectUser, updateUser, signOut };
