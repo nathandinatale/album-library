@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import { SearchContext } from '../../Pages/Albums'
-import classes from './Search.module.css'
+import classes from './Search.module.scss'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 

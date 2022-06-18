@@ -30,8 +30,7 @@ const Album = () => {
                 <Typography variant='h5'>Year Published: {selectedAlbum.publishedYear}</Typography>
                 <Typography variant='h5'>ISWC: {selectedAlbum.ISWC}</Typography>
                 <Typography variant='h5'>Genres: {Object.values(selectedAlbum.genres)}</Typography>
-                <Typography variant='h5'>Available for Rent?: {selectedAlbum.isAvailable ? 'Yes' : 'No'}</Typography>
-                
+                <Typography variant='h5'>Available for Rent?: {selectedAlbum.isAvailable ? 'Yes' : 'No'}</Typography>          
       </CardContent>
       </>
 }

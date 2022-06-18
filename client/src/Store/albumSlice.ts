@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addAlbum,
-  loadAllAlbums,
+  loadAlbums,
   fetchAlbums,
   selectAlbum,
   fetchAlbum,
+  fetchAlbumsPaginated,
 } from "../Actions/album";
 
 const albumsArray: any[] = [];
@@ -20,10 +21,11 @@ const albumSlice = createSlice({
   },
   reducers: {
     addAlbum,
-    loadAllAlbums,
+    loadAlbums,
     fetchAlbums,
     selectAlbum,
     fetchAlbum,
+    fetchAlbumsPaginated,
   },
 });
 

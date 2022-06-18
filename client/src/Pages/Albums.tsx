@@ -20,16 +20,22 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Paper, Stack, Pagination,
+    Paper, Stack, Pagination, TablePagination, TableFooter,
     Button
   } from '@mui/material'
+  import classes from './Albums.module.scss'
 
 
 export const SearchContext = createContext<string>('')
 
+
 const Albums = () => {
     const [query, setQuery] = useState('')
     const [genres, setGenres] = useState('')
+
+    const [page, setPage] = useState(0)
+    const [count, setCount] = useState(5)
+
     const navigate = useNavigate()
 
     
@@ -39,8 +45,9 @@ const Albums = () => {
 
     useEffect(() => {
         dispatch(userActions.checkLogin())
-        dispatch(albumActions.fetchAlbums())
-    },[])
+        dispatch(albumActions.fetchAlbumsPaginated({offset: page*count, count: count}))
+        console.log('page:',page,'count: ',count)
+    },[page, count])
 
     const searchQuery = query.toLowerCase()
 
@@ -58,6 +65,17 @@ const Albums = () => {
         dispatch(userActions.signOut())
         navigate('/')
     }
+
+    const handlePageSwitch = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage)
+    }
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      ) => {
+        setCount(parseInt(event.target.value, 10));
+        setPage(0);
+      };
 
 
 
@@ -88,10 +106,17 @@ const Albums = () => {
             <TableBody>
             {searchQuery ? mapResults(checkQueryMatches(loadedAlbums)) : mapResults(loadedAlbums)}
             </TableBody>
+            <TableFooter>
+    <TablePagination
+      count={100}
+      page={page}
+      onPageChange={handlePageSwitch}
+      rowsPerPage={count}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+      rowsPerPageOptions={[5,10,15,20,25,50,100]}
+    />
+    </TableFooter>           
     </Table>
-    <Stack spacing={2}>
-      <Pagination count={5}/>
-    </Stack>
     </TableContainer>
 
     </SearchContext.Provider>

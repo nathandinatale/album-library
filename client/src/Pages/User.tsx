@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userActions } from "../Store/userSlice";
 import {TextField, Button, Box} from '@mui/material'
 import { IconButton, Card, CardContent, Typography } from '@mui/material'
-import classes from './user.module.css'
+import classes from './user.module.scss'
 
 const User = () => {
     const {id} = useParams<{id: string}>()

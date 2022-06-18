@@ -6,6 +6,7 @@ import { Reducer } from "react";
 
 import store from "../Store";
 import { albumActions } from "../Store/albumSlice";
+import { OfflineShareTwoTone } from "@mui/icons-material";
 
 // improve typing here
 const addAlbum = (state: any, action: any) => {
@@ -22,7 +23,22 @@ const fetchAlbums = () => {
     .then((response) => {
       const loadedAlbums: any[] = [];
       response.data.map((album: any) => loadedAlbums.push(album));
-      store.dispatch(albumActions.loadAllAlbums(loadedAlbums));
+      store.dispatch(albumActions.loadAlbums(loadedAlbums));
+    });
+};
+
+const fetchAlbumsPaginated = (state: any, action: any) => {
+  const { offset, count } = action.payload;
+  const token = localStorage.getItem("token");
+  axios
+    .get(
+      `http://localhost:5000/api/v1/albums/search?offset=${offset}&count=${count}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    .then((response) => {
+      const loadedAlbums: any[] = [];
+      response.data.map((album: any) => loadedAlbums.push(album));
+      store.dispatch(albumActions.loadAlbums(loadedAlbums));
     });
 };
 
@@ -45,8 +61,15 @@ const selectAlbum = (state: any, action: any) => {
   state.selectedAlbum = action.payload;
 };
 
-const loadAllAlbums = (state: any, action: any) => {
+const loadAlbums = (state: any, action: any) => {
   state.albums = action.payload;
 };
 
-export { addAlbum, loadAllAlbums, fetchAlbums, selectAlbum, fetchAlbum };
+export {
+  addAlbum,
+  loadAlbums,
+  fetchAlbums,
+  selectAlbum,
+  fetchAlbum,
+  fetchAlbumsPaginated,
+};

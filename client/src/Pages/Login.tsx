@@ -8,7 +8,7 @@ import store from '../Store';
 import {userActions} from '../Store/userSlice';
 import { fetchAlbums } from '../Actions/album';
 import {useNavigate} from 'react-router-dom'
-import classes from './Login.module.css'
+import classes from './Login.module.scss'
 
 
 const Login = () => {

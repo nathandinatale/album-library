@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {TextField, Button, Box} from '@mui/material'
-import classes from './Dashboard.module.css'
+import classes from './Dashboard.module.scss'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
