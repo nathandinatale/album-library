@@ -1,5 +1,6 @@
 import express from 'express'
 import verifyAuth from '../middlewares/verifyAuth'
+import checkAdmin from '../middlewares/checkAdmin'
 
 import {
   createUser,
@@ -14,12 +15,12 @@ const router = express.Router()
 
 router.use(verifyAuth)
 
-router.get('/', findAll)
+router.get('/', checkAdmin, findAll)
 router.get('/:userId', findById)
 
 router.put('/:userId', updateUser)
 
-router.delete('/:albumId', deleteUser)
+router.delete('/:userId', checkAdmin, deleteUser)
 
 router.post('/', createUser)
 router.post('/check', checkToken)

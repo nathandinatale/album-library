@@ -17,7 +17,7 @@ export default function verifyAuth(
 
     const user = jwt.verify(token, JWT_SECRET)
     req.user = user as User
-    console.log(user)
+    console.log('User verified')
 
     next()
   } catch (error) {

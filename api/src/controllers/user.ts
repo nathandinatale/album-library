@@ -65,7 +65,6 @@ export const updateUser = async (
   try {
     const update = req.body
     const userId = req.params.userId
-    console.log('updating here', update, userId)
     const updatedUser = await UserService.update(userId, update)
     res.json(updatedUser)
   } catch (error) {

@@ -99,9 +99,6 @@ const returnAlbum = async (
 
   if (albumToReturn._borrowerId) {
     const borrowerId = albumToReturn._borrowerId.toString()
-    console.log(borrowerId)
-    console.log(userId)
-    console.log(borrowerId === userId)
     if (borrowerId.valueOf() !== userId.valueOf()) {
       throw new BadRequestError(
         `The user with ID ${userId} did not rent this album!!`

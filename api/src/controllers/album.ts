@@ -20,7 +20,7 @@ export const findAll = async (
       next(error)
     }
   }
-  console.log(`Album Request from ${req.user}`)
+  // console.log(`Album Request from ${req.user}`)
 }
 
 export const findSpecific = async (
@@ -86,9 +86,7 @@ export const createAlbum = async (
       returnDate,
       _borrowerId,
     })
-    console.log(album)
     const createdAlbum = await AlbumService.create(album)
-    console.log(createdAlbum)
     res.json(createdAlbum)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
@@ -146,7 +144,6 @@ export const borrowAlbum = async (
     const { days } = req.body
     const { email, role }: any = req.user
     const user = (await UserService.findByEmail(email)) as UserDocument
-    console.log(user)
     const albumId = req.params.albumId
     const borrowedAlbum = await AlbumService.borrowAlbum(
       user._id.toString(),

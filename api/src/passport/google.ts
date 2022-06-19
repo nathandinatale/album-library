@@ -36,7 +36,6 @@ const loginWithGoogle = () => {
             email: parsedToken.payload.email,
             role: isAdmin(parsedToken.payload.hd) ? 'ADMIN' : 'USER',
           } as UserDocument
-          console.log(user)
           const newUser = new User(user)
           await UserService.create(newUser)
         }
