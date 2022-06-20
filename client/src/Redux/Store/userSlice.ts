@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import {
   signIn,
   checkLogin,
@@ -6,17 +7,21 @@ import {
   fetchUser,
   updateUser,
   signOut,
-} from "../Actions/user";
+} from "../Reducers/user";
+import { UserState } from "../../types";
+
+export const initialUserState: UserState = {
+  userName: "",
+  userEmail: "",
+  _id: "",
+  role: null,
+  loggedIn: false,
+  selectedUser: null,
+};
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    userName: "",
-    userEmail: "",
-    _id: "",
-    role: null,
-    loggedIn: false,
-  },
+  initialState: initialUserState,
   reducers: {
     signIn,
     checkLogin,

@@ -1,17 +1,12 @@
-// @ts-ignore
-import React from "react";
 import axios from "axios";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Reducer } from "react";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 import store from "../Store";
 import { albumActions } from "../Store/albumSlice";
-import { OfflineShareTwoTone } from "@mui/icons-material";
+import { AlbumState, Album } from "../../types";
 
-// improve typing here
-const addAlbum = (state: any, action: any) => {
-  console.log("This is executed");
-  state.album.push(action.payload);
+const addAlbum = (state: AlbumState, action: PayloadAction<Album>) => {
+  state.albums.push(action.payload);
 };
 
 const fetchAlbums = () => {
@@ -21,13 +16,16 @@ const fetchAlbums = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((response) => {
-      const loadedAlbums: any[] = [];
-      response.data.map((album: any) => loadedAlbums.push(album));
+      const loadedAlbums: Album[] = [];
+      response.data.map((album: Album) => loadedAlbums.push(album));
       store.dispatch(albumActions.loadAlbums(loadedAlbums));
     });
 };
 
-const fetchAlbumsPaginated = (state: any, action: any) => {
+const fetchAlbumsPaginated = (
+  state: AlbumState,
+  action: PayloadAction<{ offset: number; count: number }>
+) => {
   const { offset, count } = action.payload;
   const token = localStorage.getItem("token");
   axios
@@ -36,13 +34,16 @@ const fetchAlbumsPaginated = (state: any, action: any) => {
       { headers: { Authorization: `Bearer ${token}` } }
     )
     .then((response) => {
-      const loadedAlbums: any[] = [];
-      response.data.map((album: any) => loadedAlbums.push(album));
+      const loadedAlbums: Album[] = [];
+      response.data.map((album: Album) => loadedAlbums.push(album));
       store.dispatch(albumActions.loadAlbums(loadedAlbums));
     });
 };
 
-const fetchAlbum = (state: any, action: any) => {
+const fetchAlbum = (
+  state: AlbumState,
+  action: PayloadAction<{ albumId: string }>
+) => {
   console.log("this action is executed");
   const token = localStorage.getItem("token");
   const { albumId } = action.payload;
@@ -51,17 +52,16 @@ const fetchAlbum = (state: any, action: any) => {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((response) => {
-      const fetchedAlbum = response.data;
-      console.log(fetchedAlbum);
+      const fetchedAlbum = response.data as Album;
       store.dispatch(albumActions.selectAlbum(fetchedAlbum));
     });
 };
 
-const selectAlbum = (state: any, action: any) => {
+const selectAlbum = (state: AlbumState, action: PayloadAction<Album>) => {
   state.selectedAlbum = action.payload;
 };
 
-const loadAlbums = (state: any, action: any) => {
+const loadAlbums = (state: AlbumState, action: PayloadAction<Album[]>) => {
   state.albums = action.payload;
 };
 

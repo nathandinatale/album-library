@@ -1,21 +1,18 @@
-import React from "react";
-import { Reducer } from "react";
 import axios from "axios";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 import store from "../Store";
-import { userActions } from "../Store/userSlice";
-import { stat } from "fs";
-import { isNullishCoalesce } from "typescript";
+import { userActions, initialUserState } from "../Store/userSlice";
+import { UserState, User } from "../../types";
 
-type role = "ADMIN" | "USER";
-
-const signIn = (state: any, action: any) => {
+const signIn = (state: UserState, action: PayloadAction<User>) => {
   if (action.payload) {
-    const { email, role, _id } = action.payload;
-    state.userName = action.payload.firstName;
+    console.log("user: ", action.payload);
+    const { email, role, _id, firstName } = action.payload;
+    state.userName = firstName;
     state.userEmail = email;
-    state.role = action.payload.role as role;
-    state._id = action.payload._id as string;
+    state.role = role;
+    state._id = _id;
     state.loggedIn = true;
   } else {
     localStorage.removeItem("token");
@@ -24,19 +21,15 @@ const signIn = (state: any, action: any) => {
   }
 };
 
-const signOut = (state: any) => {
+const signOut = (state: UserState) => {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
-  state.userName = "";
-  state.userEmail = "";
-  state._id = "";
-  state.role = null;
-  state.loggedIn = false;
+  state = initialUserState;
 };
 
-const checkLogin = (state: any) => {
+const checkLogin = (state: UserState) => {
   const token = localStorage.getItem("token");
-  const backEndResponse = axios
+  axios
     .post(
       `http://localhost:5000/api/v1/users/check`,
       {},
@@ -47,12 +40,17 @@ const checkLogin = (state: any) => {
       }
     )
     .then((backEndResponse) => {
-      const user = backEndResponse.data;
+      // would it be better to explicitly destructure from the response here?
+      console.log(backEndResponse.data);
+      const user: User = backEndResponse.data;
       store.dispatch(userActions.signIn(user));
     });
 };
 
-const fetchUser = (state: any, action: any) => {
+const fetchUser = (
+  state: UserState,
+  action: PayloadAction<{ userId: string }>
+) => {
   const token = localStorage.getItem("token");
   const { userId } = action.payload;
   axios
@@ -60,29 +58,32 @@ const fetchUser = (state: any, action: any) => {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((response) => {
-      const fetchedUser = response.data;
+      const fetchedUser: User = response.data;
       store.dispatch(userActions.selectUser(fetchedUser));
     });
 };
 
-const updateUser = (state: any, action: any) => {
+const updateUser = (
+  state: UserState,
+  action: PayloadAction<{ userId: string; firstName: string }>
+) => {
   const token = localStorage.getItem("token");
-  const { userId, ...rest } = action.payload;
+  const { userId, firstName } = action.payload;
   console.log(userId);
   axios
     .put(
       `http://localhost:5000/api/v1/users/${userId}`,
-      { ...rest },
+      { firstName },
       { headers: { Authorization: `Bearer ${token}` } }
     )
     .then((response) => {
-      const updatedUser = response.data;
+      const updatedUser: User = response.data;
       store.dispatch(userActions.signIn(updatedUser));
     });
 };
 
-const selectUser = (state: any, action: any) => {
-  state.selectedAlbum = action.payload;
+const selectUser = (state: UserState, action: PayloadAction<User>) => {
+  state.selectedUser = action.payload;
 };
 
 export { signIn, checkLogin, fetchUser, selectUser, updateUser, signOut };

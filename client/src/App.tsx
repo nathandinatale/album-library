@@ -1,35 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import { useSelector, useDispatch,  } from 'react-redux';
-import {useNavigate, Link} from 'react-router-dom'
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import Routes  from './RouterRoutes';
-import { userActions } from "./Store/userSlice";
-import { AppBar, Toolbar, Typography, Drawer, Box } from '@mui/material'
-
-
+import Routes from "./RouterRoutes";
+import { userActions } from "./Redux/Store/userSlice";
+import { Role } from "./types";
 
 export default function App() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem('token')
-  const role = localStorage.getItem('role')
-
-
-  console.log(role)
+  const token = localStorage.getItem("token") as string;
+  const role = localStorage.getItem("role") as Role;
 
   useEffect(() => {
-    dispatch(userActions.checkLogin())
-    if(!token){
-      navigate('/')
+    dispatch(userActions.checkLogin());
+    if (!token || !role) {
+      navigate("/");
     }
-  },[])
+  }, []);
 
-
-  return (
-    <>
-    {<Routes logStatus={token} role={role}/>}
-    </>
-  );
+  return <>{<Routes token={token} role={role} />}</>;
 }
-

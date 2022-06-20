@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import { User } from '../models/User'
 
+// should this be async?
 export const generateJwt = (
   req: Request,
   res: Response,

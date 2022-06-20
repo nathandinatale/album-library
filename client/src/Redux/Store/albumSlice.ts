@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import {
   addAlbum,
   loadAlbums,
@@ -6,19 +7,21 @@ import {
   selectAlbum,
   fetchAlbum,
   fetchAlbumsPaginated,
-} from "../Actions/album";
+} from "../Reducers/album";
+import { Album, AlbumState } from "../../types";
 
-const albumsArray: any[] = [];
-//const initialAlbumState = { loadedAlbums: albums };
+const albumsArray: Album[] = [];
+
+export const initialAlbumState: AlbumState = {
+  albums: albumsArray,
+  loading: true,
+  error: "",
+  selectedAlbum: null,
+};
 
 const albumSlice = createSlice({
   name: "album",
-  initialState: {
-    albums: albumsArray,
-    loading: true,
-    error: "",
-    selectedAlbum: null,
-  },
+  initialState: initialAlbumState,
   reducers: {
     addAlbum,
     loadAlbums,
