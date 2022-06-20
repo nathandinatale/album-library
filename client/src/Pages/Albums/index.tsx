@@ -43,7 +43,6 @@ const Albums = () => {
     dispatch(
       albumActions.fetchAlbumsPaginated({ offset: page * count, count: count })
     );
-    console.log("page:", page, "count: ", count);
   }, [page, count]);
 
   const checkQueryMatches = (array: any[]) => {

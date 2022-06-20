@@ -44,7 +44,6 @@ const fetchAlbum = (
   state: AlbumState,
   action: PayloadAction<{ albumId: string }>
 ) => {
-  console.log("this action is executed");
   const token = localStorage.getItem("token");
   const { albumId } = action.payload;
   axios

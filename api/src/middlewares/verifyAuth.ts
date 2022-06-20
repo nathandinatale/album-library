@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
-import { ForbiddenError } from '../helpers/apiError'
+import { UnauthorizedError } from '../helpers/apiError'
 import { User } from '../models/User'
 
 export default function verifyAuth(
@@ -21,8 +21,6 @@ export default function verifyAuth(
 
     next()
   } catch (error) {
-    console.log('This error is thrown')
-    // Change this to throw an error with 401 not authenticated
-    throw new ForbiddenError()
+    throw new UnauthorizedError()
   }
 }

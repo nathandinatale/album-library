@@ -7,7 +7,6 @@ import { UserState, User } from "../../types";
 
 const signIn = (state: UserState, action: PayloadAction<User>) => {
   if (action.payload) {
-    console.log("user: ", action.payload);
     const { email, role, _id, firstName } = action.payload;
     state.userName = firstName;
     state.userEmail = email;
@@ -41,7 +40,6 @@ const checkLogin = (state: UserState) => {
     )
     .then((backEndResponse) => {
       // would it be better to explicitly destructure from the response here?
-      console.log(backEndResponse.data);
       const user: User = backEndResponse.data;
       store.dispatch(userActions.signIn(user));
     });
@@ -69,7 +67,6 @@ const updateUser = (
 ) => {
   const token = localStorage.getItem("token");
   const { userId, firstName } = action.payload;
-  console.log(userId);
   axios
     .put(
       `http://localhost:5000/api/v1/users/${userId}`,
