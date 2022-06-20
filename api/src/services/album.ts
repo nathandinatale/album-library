@@ -1,11 +1,11 @@
+import mongoose, { isValidObjectId } from 'mongoose'
+
 import Album, { AlbumDocument } from '../models/Album'
 import {
   NotFoundError,
   BadRequestError,
   InternalServerError,
 } from '../helpers/apiError'
-import mongoose, { isValidObjectId } from 'mongoose'
-import e from 'express'
 
 const findAll = async (): Promise<AlbumDocument[]> => {
   return Album.find()

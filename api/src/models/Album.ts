@@ -1,4 +1,4 @@
-import mongoose, { Document, isValidObjectId } from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 
 // Should returndate
 export type Album = {

@@ -20,7 +20,6 @@ export const findAll = async (
       next(error)
     }
   }
-  // console.log(`Album Request from ${req.user}`)
 }
 
 export const findSpecific = async (
@@ -133,8 +132,6 @@ export const deleteAlbum = async (
   }
 }
 
-// change these functions to pull the userId directly from the request object after a middleware
-// responsible for authentication will append it to the function
 export const borrowAlbum = async (
   req: Request,
   res: Response,

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import { JWT_SECRET } from '../util/secrets'
 import jwt from 'jsonwebtoken'
 
+import { JWT_SECRET } from '../util/secrets'
 import { User } from '../models/User'
 
 // should this be async?
