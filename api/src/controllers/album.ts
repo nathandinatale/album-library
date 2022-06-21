@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, query } from 'express'
 
 import AlbumModel from '../models/Album'
 import AlbumService from '../services/album'
-import { BadRequestError } from '../helpers/apiError'
+import { BadRequestError, InternalServerError } from '../helpers/apiError'
 import UserService from '../services/user'
 import { UserDocument } from '../models/User'
 
@@ -139,7 +139,12 @@ export const borrowAlbum = async (
 ) => {
   try {
     const { days } = req.body
-    const { email, role }: any = req.user
+    if (!req.user) {
+      next(
+        new InternalServerError('Something went wrong during authentication')
+      )
+    }
+    const { email }: any = req.user
     const user = (await UserService.findByEmail(email)) as UserDocument
     const albumId = req.params.albumId
     const borrowedAlbum = await AlbumService.borrowAlbum(
@@ -163,7 +168,12 @@ export const returnAlbum = async (
   next: NextFunction
 ) => {
   try {
-    const { email, role }: any = req.user
+    if (!req.user) {
+      next(
+        new InternalServerError('Something went wrong during authentication')
+      )
+    }
+    const { email }: any = req.user
     const user = (await UserService.findByEmail(email)) as UserDocument
     const albumId = req.params.albumId
     const returnedAlbum = await AlbumService.returnAlbum(
