@@ -1,5 +1,6 @@
 import express from 'express'
 import verifyAuth from '../middlewares/verifyAuth'
+import checkAdmin from '../middlewares/checkAdmin'
 
 import {
   createAlbum,
@@ -20,9 +21,9 @@ router.get('/', findAll)
 router.get('/search', findSpecific)
 router.get('/:albumId', findById)
 router.post('/', createAlbum)
-router.put('/:albumId', updateAlbum)
+router.put('/:albumId', checkAdmin, updateAlbum)
 
-router.delete('/:albumId', deleteAlbum)
+router.delete('/:albumId', checkAdmin, deleteAlbum)
 
 router.put('/:albumId/borrow', borrowAlbum)
 router.put('/:albumId/return', returnAlbum)
