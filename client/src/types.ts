@@ -12,6 +12,14 @@ export type RouterRoutesProps = {
   role: Role;
 };
 
+export type AlbumPreviewProps = {
+  album: Album;
+};
+
+export type SearchProps = {
+  setQuery: Function;
+};
+
 export type Album = {
   ISWC: number;
   artist: string;

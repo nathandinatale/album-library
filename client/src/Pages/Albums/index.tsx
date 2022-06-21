@@ -45,8 +45,8 @@ const Albums = () => {
     );
   }, [page, count]);
 
-  const checkQueryMatches = (array: any[]) => {
-    return array.filter(
+  const checkQueryMatches = (albumArray: Album[]) => {
+    return albumArray.filter(
       (album: Album) =>
         album.name.toLowerCase().includes(searchQuery) ||
         album.artist.toLowerCase().includes(searchQuery) ||
@@ -54,8 +54,8 @@ const Albums = () => {
     );
   };
 
-  const mapResults = (array: any[]) => {
-    return array.map((album: any) => (
+  const mapResults = (albumArray: Album[]) => {
+    return albumArray.map((album: Album) => (
       <AlbumPreview key={album.name} album={album} />
     ));
   };

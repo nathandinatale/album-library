@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import { RootState, Album } from "../../types";
+import { RootState, Album, AlbumPreviewProps } from "../../types";
 import { TableRow, TableCell } from "@mui/material";
 import Button from "@mui/material/Button";
 
-export const AlbumPreview = ({ album }: any) => {
+export const AlbumPreview = ({ album }: AlbumPreviewProps) => {
   const [currAlbum, setAlbum] = useState(album);
   const [isOwnRental, setRented] = useState(false);
 

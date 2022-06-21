@@ -3,12 +3,13 @@ import { useContext } from "react";
 import { SearchContext } from "../../Pages/Albums";
 import classes from "./Search.module.scss";
 import { Box, TextField } from "@mui/material";
+import { SearchProps } from "../../types";
 
-const Search = (Props: any) => {
+const Search = ({ setQuery }: SearchProps) => {
   const typedQuery = useContext(SearchContext);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    Props.setQuery(event.target.value);
+    setQuery(event.target.value);
   };
 
   return (

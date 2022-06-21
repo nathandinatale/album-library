@@ -1,5 +1,9 @@
 import axios from "axios";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import {
+  CredentialResponse,
+  GoogleLogin,
+  GoogleOAuthProvider,
+} from "@react-oauth/google";
 import { Provider, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +16,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSuccess = async (googleResponse: any) => {
+  const handleSuccess = async (googleResponse: CredentialResponse) => {
     const tokenId = googleResponse.credential;
 
     const backendResponse = await axios.post(
