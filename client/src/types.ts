@@ -20,6 +20,10 @@ export type SearchProps = {
   setQuery: Function;
 };
 
+export type AlbumFormProps = {
+  editAlbum?: Album | null;
+};
+
 export type Album = {
   ISWC: number;
   artist: string;

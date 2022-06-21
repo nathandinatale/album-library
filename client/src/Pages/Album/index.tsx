@@ -1,25 +1,31 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import AlbumForm from "../../Components/AlbumForm";
 import { albumActions } from "../../Redux/Store/albumSlice";
 import { RootState } from "../../types";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 
 const Album = () => {
+  const [editMode, setEditMode] = useState(false);
   const dispatch = useDispatch();
   const selectedAlbum = useSelector(
     (state: RootState) => state.album.selectedAlbum
   );
+  const userRole = useSelector((state: RootState) => state.user.role);
 
   const { id } = useParams<{ id: string }>();
-  console.log(id);
 
   useEffect(() => {
     if (id) {
       dispatch(albumActions.fetchAlbum({ albumId: id }));
     }
   }, []);
+
+  const handleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   return (
     <Card>
@@ -45,6 +51,10 @@ const Album = () => {
           </CardContent>
         </>
       )}
+      {userRole === "ADMIN" && (
+        <Button onClick={handleEditMode}>Edit Album</Button>
+      )}
+      {editMode && <AlbumForm editAlbum={selectedAlbum} />}
     </Card>
   );
 };
